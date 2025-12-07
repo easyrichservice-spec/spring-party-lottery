@@ -198,7 +198,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
               <tr key={row.id} className="hover:bg-gray-200 transition">
                 <Td>{row.ticket_no}</Td>
                 <Td>{row.prize_name}</Td>
-                <Td>{row.prize_area}</Td>
+                <Td>第{row.prize_area}桌</Td>
               </tr>
             ))}
           </tbody>
@@ -252,5 +252,5 @@ function Th({ children, onClick }: any) {
 }
 
 function Td({ children }: any) {
-  return <td className="px-6 py-3 whitespace-nowrap">第{children}桌</td>;
+  return <td className="px-6 py-3 whitespace-nowrap">{children}</td>;
 }
