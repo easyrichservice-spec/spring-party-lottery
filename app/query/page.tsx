@@ -158,8 +158,13 @@ export default function QueryPage() {
 
             <div className="text-right">
               <div className="text-xs text-gray-500 mb-1">領獎區域</div>
+
               <div className="text-lg text-gray-700">
-                第{r.area || '—'}桌
+                {r.area && r.area !== '-' ? (
+                  <>第{r.area}桌</>
+                ) : (
+                  <>—</>  // 不顯示第與桌
+                )}
               </div>
             </div>
           </div>
