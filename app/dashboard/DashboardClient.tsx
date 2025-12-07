@@ -148,32 +148,32 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
         />
 
         <select
-          className="px-4 py-2 border rounded-lg bg-white text-gray-900 shadow-sm"
-          value={filterPrize}
-          onChange={(e) => {
-            setFilterPrize(e.target.value);
-            setPage(1);
-          }}
-        >
-          <option value="">全部獎項</option>
-          {prizeList.map((p) => (
-            <option key={p}>{p}</option>
-          ))}
-        </select>
+  className="px-4 py-2 border rounded-lg bg-white text-gray-900 shadow-sm"
+  value={filterPrize}
+  onChange={(e) => {
+    setFilterPrize(e.target.value);
+    setPage(1);
+  }}
+>
+  <option value="">全部獎項</option>
+  {prizeList.map((p) => (
+    <option key={p} value={p}>{p}</option>
+  ))}
+</select>
 
-        <select
-          className="px-4 py-2 border rounded-lg bg-white text-gray-900 shadow-sm"
-          value={filterArea}
-          onChange={(e) => {
-            setFilterArea(e.target.value);
-            setPage(1);
-          }}
-        >
-          <option value="">全部區域</option>
-          {areaList.map((a) => (
-            <option key={a}>{a}</option>
-          ))}
-        </select>
+<select
+  className="px-4 py-2 border rounded-lg bg-white text-gray-900 shadow-sm"
+  value={filterArea}
+  onChange={(e) => {
+    setFilterArea(e.target.value);
+    setPage(1);
+  }}
+>
+  <option value="">全部區域</option>
+  {areaList.map((a) => (
+    <option key={a} value={a}>{a}</option>
+  ))}
+</select>
       </div>
 
       {/* 表格 */}
