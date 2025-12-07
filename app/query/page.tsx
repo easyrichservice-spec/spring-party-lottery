@@ -89,18 +89,34 @@ export default function QueryPage() {
       {/* 輸入欄位 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {inputs.map((v, i) => (
-          <div key={i} className="flex flex-col">
-            <input
-              value={v}
-              onChange={(e) => updateInput(i, e.target.value)}
-              placeholder={`券號 ${i + 1}`}
-              className={`p-3 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 
-                ${fieldErrors[i] ? 'border-red-400 bg-red-50' : ''}`}
-            />
-            {fieldErrors[i] && (
-              <span className="text-red-600 text-sm mt-1">{fieldErrors[i]}</span>
-            )}
-          </div>
+          <input
+            key={i}
+            value={v}
+            maxLength={5}
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder={`券號 ${i + 1}`}
+            className="p-3 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-center text-lg"
+            onChange={(e) => {
+              // 只允許數字
+              const cleaned = e.target.value.replace(/\D/g, '');
+              updateInput(i, cleaned);
+
+              // 滿 5 碼 → 跳下一格
+              if (cleaned.length === 5 && i < inputs.length - 1) {
+                const nextInput = document.getElementById(`ticket-${i + 1}`);
+                nextInput?.focus();
+              }
+            }}
+            onKeyDown={(e) => {
+              // Backspace 且欄位為空 → 回上一格
+              if (e.key === "Backspace" && inputs[i] === "" && i > 0) {
+                const prevInput = document.getElementById(`ticket-${i - 1}`);
+                prevInput?.focus();
+              }
+            }}
+            id={`ticket-${i}`}
+          />
         ))}
       </div>
 
