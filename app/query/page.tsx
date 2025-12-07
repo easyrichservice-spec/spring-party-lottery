@@ -7,12 +7,34 @@ export default function QueryPage() {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [fieldErrors, setFieldErrors] = useState(['', '', '', '', '']); // 每欄錯誤訊息
 
-  // 更新輸入框
-  function updateInput(index: number, value: string) {
+  // 更新輸入框（含五碼驗證）
+  function updateInput(index: number, rawValue: string) {
+    let value = rawValue.trim();
+    let errors = [...fieldErrors];
+
+    // 1️⃣ 只能輸入數字
+    if (!/^\d*$/.test(value)) {
+      errors[index] = '僅能輸入數字';
+      value = '';
+    }
+    // 2️⃣ 限制最多五碼
+    else if (value.length > 5) {
+      errors[index] = '券號需為 5 位數';
+      value = '';
+    }
+    // 3️⃣ 剛好五碼才算有效
+    else if (value.length > 0 && value.length < 5) {
+      errors[index] = '需為完整 5 位數';
+    } else {
+      errors[index] = '';
+    }
+
     const next = [...inputs];
     next[index] = value;
     setInputs(next);
+    setFieldErrors(errors);
   }
 
   // 查詢
@@ -20,10 +42,12 @@ export default function QueryPage() {
     setErrorMessage('');
     setResults([]);
 
-    const tickets = inputs.map(x => x.trim()).filter(Boolean);
+    const tickets = inputs
+      .map(x => x.trim())
+      .filter(x => x.length === 5); // 只接受 5 碼券號
 
     if (tickets.length === 0) {
-      setErrorMessage('請至少輸入一張券號再查詢');
+      setErrorMessage('請至少輸入一張正確的 5 位數券號再查詢');
       return;
     }
 
@@ -50,6 +74,7 @@ export default function QueryPage() {
   // 清除
   function clearAll() {
     setInputs(['', '', '', '', '']);
+    setFieldErrors(['', '', '', '', '']);
     setResults([]);
     setErrorMessage('');
   }
@@ -58,19 +83,24 @@ export default function QueryPage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-extrabold mb-6">中獎查詢系統</h1>
       <p className="text-gray-600 mb-6">
-        可輸入最多 5 張券號（每欄一張），按「查詢」即可顯示結果。
+        可輸入最多 5 張券號（每欄一張），需為五位數。
       </p>
 
       {/* 輸入欄位 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {inputs.map((v, i) => (
-          <input
-            key={i}
-            value={v}
-            onChange={(e) => updateInput(i, e.target.value)}
-            placeholder={`券號 ${i + 1}`}
-            className="p-3 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
+          <div key={i} className="flex flex-col">
+            <input
+              value={v}
+              onChange={(e) => updateInput(i, e.target.value)}
+              placeholder={`券號 ${i + 1}`}
+              className={`p-3 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 
+                ${fieldErrors[i] ? 'border-red-400 bg-red-50' : ''}`}
+            />
+            {fieldErrors[i] && (
+              <span className="text-red-600 text-sm mt-1">{fieldErrors[i]}</span>
+            )}
+          </div>
         ))}
       </div>
 
