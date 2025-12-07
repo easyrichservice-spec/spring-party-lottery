@@ -35,10 +35,10 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
   };
 
   // -------------------------------------------------------
-  // ✨ 自動每 10 秒刷新資料
+  // ✨ 自動每 30 秒刷新資料
   // -------------------------------------------------------
   useEffect(() => {
-    const interval = setInterval(fetchData, 10000);
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
 
