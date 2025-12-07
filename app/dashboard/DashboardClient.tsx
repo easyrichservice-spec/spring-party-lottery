@@ -252,5 +252,5 @@ function Th({ children, onClick }: any) {
 }
 
 function Td({ children }: any) {
-  return <td className="px-6 py-3 whitespace-nowrap">{children}</td>;
+  return <td className="px-6 py-3 whitespace-nowrap">第{children}桌</td>;
 }
