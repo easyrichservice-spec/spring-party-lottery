@@ -16,7 +16,7 @@ export default function Navbar() {
 
         {/* 左側 Logo */}
         <Link href="/" className="text-2xl font-bold text-gray-900">
-          抽獎系統
+          輕易豐盛
         </Link>
 
         {/* 右側導覽 */}
