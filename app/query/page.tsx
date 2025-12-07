@@ -84,6 +84,7 @@ export default function QueryPage() {
       <h1 className="text-3xl font-extrabold mb-6">中獎查詢系統</h1>
       <p className="text-gray-600 mb-6">
         可輸入最多 5 張券號
+        超過五張票請開新分頁查詢。
       </p>
       <p className="text-gray-600 mb-6">
         超過五張票請開新分頁查詢。
