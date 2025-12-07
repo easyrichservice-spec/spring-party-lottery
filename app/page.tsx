@@ -41,7 +41,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-6 text-center text-gray-600 text-sm animate-fadeIn">
-        <p>活動主辦：輕易豐盛的快樂天堂</p>
+        <p>活動主辦：輕易豐盛學苑</p>
         <p>© 2025 All Rights Reserved</p>
       </footer>
     </div>
