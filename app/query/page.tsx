@@ -129,7 +129,7 @@ export default function QueryPage() {
             <div className="text-right">
               <div className="text-xs text-gray-500 mb-1">領獎區域</div>
               <div className="text-lg text-gray-700">
-                {r.area || '—'}
+                第{r.area || '—'}桌
               </div>
             </div>
           </div>
