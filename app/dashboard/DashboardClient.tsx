@@ -1,8 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { supabaseClient } from "@/lib/supabaseClient";
 
 export default function DashboardClient({ tickets }: { tickets: any[] }) {
+  const [data, setData] = useState(tickets);
+  const [loading, setLoading] = useState(false);
+
   const [search, setSearch] = useState("");
   const [filterPrize, setFilterPrize] = useState("");
   const [filterArea, setFilterArea] = useState("");
@@ -12,11 +16,58 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
 
   const pageSize = 10;
 
-  // -----------------------------
-  // 搜尋 + 篩選 + 排序
-  // -----------------------------
+  // -------------------------------------------------------
+  // 🔄 抓取最新資料
+  // -------------------------------------------------------
+  const fetchData = async () => {
+    setLoading(true);
+
+    const { data: fresh, error } = await supabaseClient
+      .from("prize_tickets")
+      .select("*")
+      .order("ticket_no");
+
+    if (!error) {
+      setData(fresh || []);
+    }
+
+    setLoading(false);
+  };
+
+  // -------------------------------------------------------
+  // ✨ 自動每 10 秒刷新資料
+  // -------------------------------------------------------
+  useEffect(() => {
+    const interval = setInterval(fetchData, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // -------------------------------------------------------
+  // ⚡ Supabase Realtime：資料庫變動 → 即時更新
+  // -------------------------------------------------------
+  useEffect(() => {
+    const channel = supabaseClient
+      .channel("realtime_prize_tickets")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "prize_tickets" },
+        (payload) => {
+          console.log("🔔 Realtime Update:", payload);
+          fetchData(); // 自動刷新資料
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabaseClient.removeChannel(channel);
+    };
+  }, []);
+
+  // -------------------------------------------------------
+  // 🔍 搜尋 + 篩選 + 排序
+  // -------------------------------------------------------
   const filtered = useMemo(() => {
-    let list = [...tickets];
+    let list = [...data];
 
     const q = search.toLowerCase();
 
@@ -29,13 +80,8 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
       );
     }
 
-    if (filterPrize) {
-      list = list.filter((r) => r.prize_name === filterPrize);
-    }
-
-    if (filterArea) {
-      list = list.filter((r) => r.prize_area === filterArea);
-    }
+    if (filterPrize) list = list.filter((r) => r.prize_name === filterPrize);
+    if (filterArea) list = list.filter((r) => r.prize_area === filterArea);
 
     list.sort((a, b) => {
       const A = a[sortKey]?.toString() || "";
@@ -44,44 +90,53 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
     });
 
     return list;
-  }, [tickets, search, filterPrize, filterArea, sortKey, sortAsc]);
+  }, [data, search, filterPrize, filterArea, sortKey, sortAsc]);
 
-  // -----------------------------
-  // 分頁
-  // -----------------------------
+  // -------------------------------------------------------
+  // 🔢 分頁
+  // -------------------------------------------------------
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
-  // -----------------------------
-  // 排序箭頭
-  // -----------------------------
-  function toggleSort(key: string) {
+  const toggleSort = (key: string) => {
     if (sortKey === key) setSortAsc(!sortAsc);
     else {
       setSortKey(key);
       setSortAsc(true);
     }
-  }
+  };
 
-  const prizeList = [...new Set(tickets.map((t) => t.prize_name).filter(Boolean))];
-  const areaList = [...new Set(tickets.map((t) => t.prize_area).filter(Boolean))];
+  const prizeList = [...new Set(data.map((t) => t.prize_name).filter(Boolean))];
+  const areaList = [...new Set(data.map((t) => t.prize_area).filter(Boolean))];
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
 
-      {/* 標題 */}
-      <h1 className="text-4xl font-extrabold text-gray-900 mb-8">抽獎儀表板</h1>
+      {/* 標題 + 刷新按鈕 */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-extrabold text-gray-900">抽獎儀表板</h1>
+
+        <button
+          onClick={fetchData}
+          disabled={loading}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+        >
+          {loading && (
+            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          )}
+          {loading ? "更新中..." : "重新整理"}
+        </button>
+      </div>
 
       {/* 統計卡片 */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <StatCard label="總中獎券數" value={tickets.length} />
+        <StatCard label="總中獎券數" value={data.length} />
         <StatCard label="獎項種類數" value={prizeList.length} />
         <StatCard label="領獎區域數" value={areaList.length} />
       </div>
 
       {/* 搜尋 / 篩選 */}
       <div className="flex flex-wrap gap-4 mb-6">
-
         <input
           className="px-4 py-2 border rounded-lg bg-white text-gray-900 shadow-sm"
           placeholder="搜尋券號 / 獎品 / 區域"
@@ -160,7 +215,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
           上一頁
         </button>
 
-        <span className="text-white">
+        <span className="text-gray-900 font-medium">
           第 {page} / {totalPages} 頁
         </span>
 
