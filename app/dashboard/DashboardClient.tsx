@@ -178,6 +178,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
 
       {/* 表格 */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
+        <div className="overflow-x-auto"> {/* ⭐ 加這行 */}
         <table className="min-w-full">
           <thead className="bg-gray-100">
             <tr className="text-gray-800">
@@ -203,6 +204,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* 分頁 */}
