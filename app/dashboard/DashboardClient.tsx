@@ -178,7 +178,6 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
 
       {/* 表格 */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        <div className="overflow-x-auto"> {/* ⭐ 加這行 */}
         <table className="min-w-full">
           <thead className="bg-gray-100">
             <tr className="text-gray-800">
@@ -199,12 +198,16 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
               <tr key={row.id} className="hover:bg-gray-200 transition">
                 <Td>{row.ticket_no}</Td>
                 <Td>{row.prize_name}</Td>
-                <Td>第{row.prize_area}桌</Td>
+                <Td>
+                  {/* 如果值是準備中...，則直接顯示，否則加上「第」和「桌」 */}
+                  {row.prize_area === '準備中...'
+                    ? row.prize_area
+                    : `第${row.prize_area}桌`}
+                </Td>
               </tr>
             ))}
           </tbody>
         </table>
-        </div>
       </div>
 
       {/* 分頁 */}

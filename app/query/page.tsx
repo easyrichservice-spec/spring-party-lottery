@@ -177,9 +177,14 @@ export default function QueryPage() {
 
               <div className="text-lg text-gray-700">
                 {r.area && r.area !== '-' ? (
-                  <>第{r.area}桌</>
+                  // 檢查 r.area 是否為有效數字。
+                  // 如果是數字 (例如: '1', '2')，則顯示「第X桌」。
+                  // 如果不是數字 (例如: '準備中...')，則直接顯示原始字串，避免錯誤。
+                  isNaN(Number(r.area)) 
+                    ? <>{r.area}</> 
+                    : <>第{r.area}桌</>
                 ) : (
-                  <>—</>  // 不顯示第與桌
+                  <>—</>  // r.area 為空或 '-'
                 )}
               </div>
             </div>
