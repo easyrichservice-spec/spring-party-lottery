@@ -16,13 +16,13 @@ export default function Navbar() {
 
         {/* 左側 Logo */}
         <Link href="/" className="text-2xl font-bold text-gray-900">
-          輕易豐盛
+          2026財富覺醒高峰會抽獎查詢系統
         </Link>
 
         {/* 右側導覽 */}
         <div className="flex gap-3">
           <Link href="/query" className={linkClass("/query")}>查詢頁面</Link>
-          <Link href="/dashboard" className={linkClass("/dashboard")}>儀表板</Link>
+          
         </div>
 
       </div>
