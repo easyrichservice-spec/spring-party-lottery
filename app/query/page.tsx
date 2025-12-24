@@ -227,7 +227,7 @@ export default function QueryPage() {
                   // 如果不是數字 (例如: '準備中...')，則直接顯示原始字串，避免錯誤。
                   isNaN(Number(r.area)) 
                     ? <>{r.area}</> 
-                    : <>第{r.area}桌</>
+                    : <>{r.area}</>
                 ) : (
                   <>—</>  // r.area 為空或 '-'
                 )}

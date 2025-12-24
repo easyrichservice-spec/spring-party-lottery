@@ -202,7 +202,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
                   {/* 如果值是準備中...，則直接顯示，否則加上「第」和「桌」 */}
                   {row.prize_area === '準備中...'
                     ? row.prize_area
-                    : `第${row.prize_area}桌`}
+                    : `${row.prize_area}`}
                 </Td>
               </tr>
             ))}
