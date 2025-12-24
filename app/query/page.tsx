@@ -9,6 +9,13 @@ export default function QueryPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState(['', '', '', '', '']); // 每欄錯誤訊息
 
+    // 控制圖片浮動顯示的 State
+  const [showImagePreview, setShowImagePreview] = useState(false);
+
+  // 請在此處替換您的實際圖片連結
+  const imageUrl = "https://i.meee.com.tw/9LizzOo.jpg";
+
+
   // 更新輸入框（含五碼驗證）
   function updateInput(index: number, rawValue: string) {
     let value = rawValue.trim();
@@ -95,6 +102,34 @@ export default function QueryPage() {
         </a>
         。
       </p>
+      {/* 圖片預覽連結區塊 */}
+      <div className="relative inline-block w-fit">
+        <a
+          href={imageUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onMouseEnter={() => setShowImagePreview(true)}
+          onMouseLeave={() => setShowImagePreview(false)}
+          className="text-sm text-orange-600 hover:text-orange-700 font-bold flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          查看獎品領取配置圖 (滑鼠移入預覽)
+        </a>
+
+        {/* 浮動預覽圖片容器 */}
+        {showImagePreview && (
+          <div className="absolute z-50 top-8 left-0 p-2 bg-white border shadow-2xl rounded-xl w-64 sm:w-80 animate-in fade-in zoom-in duration-200">
+            <img 
+              src={imageUrl} 
+              alt="獎品配置圖預覽" 
+              className="w-full h-auto rounded-lg"
+            />
+            <p className="text-[10px] text-gray-400 mt-2 text-center">點擊可於新分頁查看原圖</p>
+          </div>
+        )}
+      </div>
 
       {/* 輸入欄位 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
