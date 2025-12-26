@@ -13,7 +13,7 @@ export default function QueryPage() {
   const [showImagePreview, setShowImagePreview] = useState(false);
 
   // 您的實際圖片連結
-  const imageUrl = "https://i.ibb.co/zVT7kkjR/2026-Google-1.jpg";
+  const imageUrl = "https://i.ibb.co/m3XwxfH/2026-1141226.jpg";
 
 
   // 更新輸入框（含五碼驗證）
