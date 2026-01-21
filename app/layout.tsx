@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "2026財富覺醒高峰會抽獎查詢系統",
+  title: "2026春酒抽獎查詢系統",
   description: "Query System",
 };
 

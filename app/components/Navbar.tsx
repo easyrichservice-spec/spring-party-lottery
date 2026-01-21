@@ -16,7 +16,7 @@ export default function Navbar() {
 
         {/* 左側 Logo */}
         <Link href="/" className="text-2xl font-bold text-gray-900">
-          2026財富覺醒高峰會抽獎查詢系統
+          2026春酒抽獎查詢系統
         </Link>
 
         {/* 右側導覽 */}

@@ -23,7 +23,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
     setLoading(true);
 
     const { data: fresh, error } = await supabaseClient
-      .from("prize_tickets")
+      .from("springpary_prize_tickets")
       .select("*")
       .order("ticket_no");
 
@@ -50,7 +50,7 @@ export default function DashboardClient({ tickets }: { tickets: any[] }) {
       .channel("realtime_prize_tickets")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "prize_tickets" },
+        { event: "*", schema: "public", table: "springpary_prize_tickets" },
         (payload) => {
           console.log("🔔 Realtime Update:", payload);
           fetchData(); // 自動刷新資料

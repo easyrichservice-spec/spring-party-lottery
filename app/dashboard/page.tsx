@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   const supabase = createServerClient();
 
   const { data: tickets, error } = await supabase
-    .from("prize_tickets")
+    .from("springpary_prize_tickets")
     .select("*")
     .order("ticket_no");
 

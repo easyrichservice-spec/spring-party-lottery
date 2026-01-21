@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   const upperTickets = tickets.map((t: string) => t.trim().toUpperCase());
 
   const { data, error } = await supabase
-    .from('prize_tickets')
+    .from('springpary_prize_tickets')
     .select('ticket_no, prize_name, prize_area')
     .in('ticket_no', upperTickets);
 
